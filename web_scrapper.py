@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import logging
 
 logging.basicConfig(
-    filename='web_scrapper_log',
+    filename='web_scraper_log',
     level=logging.INFO,
     format='%(asctime)s %(levelname)s %(message)s'
 )
