@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import logging
 
 logging.basicConfig(
-    filename='web_scraper_log',
+    filename='web_scraper_log.log',
     level=logging.INFO,
     format='%(asctime)s %(levelname)s %(message)s'
 )
@@ -22,10 +22,14 @@ def start_driver(url):
 
 def get_product_info(driver, main_url, last_page):
     prod_info = []
+    
+    # added for testing purposes
+    last_page = 3
     for page in range(1, last_page+1):
         url = main_url + f'?page={page}'
         logging.info('Currently running page: %s',page)
         driver = start_driver(url)
+        logging.info("Waiting for listing-card-wrapper element to show")
         element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.ID, 'listing-card-wrapper'))
             )
@@ -44,6 +48,8 @@ def get_product_info(driver, main_url, last_page):
             'title':'sc-cspYLC.fSIcIP',
             'year':'sc-dQEtJz.iIgTYO',
             'km':'sc-dQEtJz.iIgTYO',
+            'steering_side':'sc-dQEtJz.iIgTYO',
+            'region_specs':'sc-dQEtJz.iIgTYO'
             'location':'sc-edKZPI.gnLJci',
             'tags':'mui-style-hwdwqa'
         }
@@ -58,6 +64,8 @@ def get_product_info(driver, main_url, last_page):
             'title':None,
             'year':None,
             'km':None,
+            'steering_side':None,
+            'region_specs':None,
             'location':None,
             'tag':None
         }
@@ -74,6 +82,16 @@ def get_product_info(driver, main_url, last_page):
                 elif key=='km':
                     try:
                         ad_dict[key] = product.find_elements(by=By.CLASS_NAME, value=val)[1].text
+                    except:
+                        logging.error(f'Error retreiving information for {key} link to car: %s', ad_dict['link'])
+                elif key=='steering_side':
+                    try:
+                        ad_dict[key] = product.find_elements(by=By.CLASS_NAME, value=val)[2].text
+                    except:
+                        logging.error(f'Error retreiving information for {key} link to car: %s', ad_dict['link'])
+                elif key=='region_specs':
+                    try:
+                        ad_dict[key] = product.find_elements(by=By.CLASS_NAME, value=val)[3].text
                     except:
                         logging.error(f'Error retreiving information for {key} link to car: %s', ad_dict['link'])
                 else:
