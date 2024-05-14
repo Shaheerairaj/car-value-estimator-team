@@ -13,6 +13,7 @@ logging.basicConfig(
 
 
 def start_driver(url):
+    logging.info("Requesting URL: %s", url)
     driver = webdriver.Chrome()
     driver.get(url)
 
@@ -69,17 +70,17 @@ def get_product_info(driver, main_url, last_page):
                     try:
                         ad_dict[key] = product.find_elements(by=By.CLASS_NAME, value=val)[0].text
                     except:
-                        logging.error(f'Error retreiving information for {key}')
+                        logging.error(f'Error retreiving information for {key} link to car: %s', ad_dict['link'])
                 elif key=='km':
                     try:
                         ad_dict[key] = product.find_elements(by=By.CLASS_NAME, value=val)[1].text
                     except:
-                        logging.error(f'Error retreiving information for {key}')
+                        logging.error(f'Error retreiving information for {key} link to car: %s', ad_dict['link'])
                 else:
                     try:
                         ad_dict[key] = product.find_element(by=By.CLASS_NAME, value=val).text
                     except:
-                        logging.error(f'Error retreiving information for {key}')
+                        logging.error(f'Error retreiving information for {key} link to car: %s', ad_dict['link'])
             prod_info.append(ad_dict)
     driver.quit()
     return prod_info
@@ -89,5 +90,6 @@ driver = start_driver(url)
 last_page = driver.find_elements(by=By.CLASS_NAME, value='sc-lizKOf.bzkMkX.edge_button')[0]
 last_page = int(last_page.get_attribute('href').split('page=')[1])
 logging.info('The last Page is: %s', str(last_page))
+logging.info('Retrieving product information')
 prod_info = get_product_info(driver, url, last_page)
 cars_df = pd.DataFrame(prod_info)
