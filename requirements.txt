@@ -3,5 +3,3 @@ pandas
 
 # web scrapping
 selenium
-requests
-bs4
