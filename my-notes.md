@@ -10,3 +10,17 @@
 09. Car Mileage    ---------> sc-dQEtJz.iIgTYO
 10. Ad location    ---------> sc-edKZPI.gnLJci
 11. Ad tag    --------------> mui-style-hwdwqa
+
+# Car brands to filter for:
+01. Toyota
+02. Honda
+03. Nissan
+04. Hyundai
+05. KIA
+06. Ford
+07. Chevrolet
+08. Volkswagen
+09. Mercedes-benz
+10. BMW
+11. Audi
+12. Lexus
