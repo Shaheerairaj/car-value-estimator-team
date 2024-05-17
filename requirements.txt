@@ -1,5 +1,6 @@
 # Core libraries
 pandas
+python-dotenv
 
 # web scrapping
 selenium
