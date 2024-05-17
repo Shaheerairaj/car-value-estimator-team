@@ -18,6 +18,4 @@ Build a web application where users can input the relevant features and conditio
 
 # Disclaimer
 
-Project developed as a learning exercise. The responsibility for what others do with this code is for demonstration purposes only and should not be used for insane web scraping of websites. The Repo has no affiliation with the site and neither the site nor software will be held liable for any consequences resulting from its use. 
-
-- Terms of Use: https://uae.dubizzle.com/terms/
+Project developed as a learning exercise. The responsibility for what others do with this code is for demonstration purposes only and should not be used for insane web scraping of websites. The Repo has no affiliation with any site and neither the site nor software will be held liable for any consequences resulting from its use. 
