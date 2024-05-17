@@ -21,21 +21,24 @@ import warnings
 import time
 import os
 
-# Define the website to scrape (Dubizzle used cars)
-website = os.environ.get('WEBSITE')
-# Define path where we downloaded Chrome driver
-path = os.environ.get('CHROME_DRIVER')
+def start_driver(): 
+    # Define the website to scrape (Dubizzle used cars)
+    website = os.environ.get('WEBSITE')
+    # Define path where we downloaded Chrome driver
+    path = os.environ.get('CHROME_DRIVER')
+        
+    # Set available options (if applicable)
+    options = webdriver.ChromeOptions()
+    options.headless = True
+    warnings.filterwarnings('ignore')
+        
+    # Initializing Google Chrome webdriver from local host as driver 
+    cService = webdriver.ChromeService(executable_path=path)
+    driver = webdriver.Chrome(options=options, service=cService)
+    driver.get(website)
+    time.sleep(5)
     
-# Set available options (if applicable)
-options = webdriver.ChromeOptions()
-options.headless = True
-warnings.filterwarnings('ignore')
-    
-# Initializing Google Chrome webdriver from local host as driver 
-cService = webdriver.ChromeService(executable_path=path)
-driver = webdriver.Chrome(options=options, service=cService)
-driver.get(website)
-time.sleep(5)
+    return driver
 
 def brands_filter(brand, dropdown_list, driver): 
     # Select elements from dropdown by inputting text and clicking 
@@ -51,6 +54,8 @@ def brands_filter(brand, dropdown_list, driver):
     time.sleep(3)
 
 # main
+driver = start_driver()
+
 dropdown = driver.find_element(By.NAME, 'category_1')
 filter = ['Toyota', 'Honda', 'Nissan', 'Hyundai', 'KIA', 'Ford', 'Chevrolet', 'Volkswagen', 'Mercedes-Benz', 'BMW', 'Audi', 'Lexus']
 
@@ -111,7 +116,7 @@ for search in range(len(filter)):
             
             # Iterate over list
             for ad in listings:
-                listing_id = ad.get_attribute('href').split('---')[1][:-1]
+                listing_id = ad.find_element(By.XPATH, './/div/a').get_attribute('href').split('---')[1][:-1]
                 listing_link = ad.get_attribute('href')
                 listing_image = ad.find_element(By.XPATH, './/img[@class="sc-jkTpcO ktmvcc"]')
                 listing_price = ad.find_element(By.XPATH, './/div[@data-testid="listing-price"]').text
@@ -144,7 +149,7 @@ for search in range(len(filter)):
             time.sleep(3)
             # Iterate over list
             for ad in listings:
-                listing_id = ad.get_attribute('href').split('---')[1][:-1]
+                listing_id = ad.find_element(By.XPATH, './/div/a').get_attribute('href').split('---')[1][:-1]
                 listing_link = ad.get_attribute('href')
                 listing_image = ad.find_element(By.XPATH, './/img[@class="sc-jkTpcO ktmvcc"]')
                 listing_price = ad.find_element(By.XPATH, './/div[@data-testid="listing-price"]').text
@@ -191,7 +196,7 @@ finally:
     driver.quit()
 
 # Create a Data Frame using Pandas (Dictionaries)
-df = pd.DataFrame({'price': price, 'carBrand': brand, 'carModel': model,
+df = pd.DataFrame({'ad_id': ad_id, 'link': link, 'image': image, 'price': price, 'carBrand': brand, 'carModel': model,
                   'title': title, 'year': year, 'mileage': mileage, 'location': location, 'tag': tag})
 
 # Export data to CSV file 
