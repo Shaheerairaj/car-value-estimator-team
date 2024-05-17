@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+import os
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -107,8 +110,9 @@ def get_all_product_info(driver, main_url, last_page):
     driver.quit()
     return prod_list
 
-
-url = 'https://uae.dubizzle.com/motors/used-cars/toyota/'
+base_url = os.getenv('BASE_URL')
+car_brand = 'ford/'
+url = base_url + car_brand
 driver = start_driver(url)
 last_page = driver.find_elements(by=By.CLASS_NAME, value='sc-lizKOf.bzkMkX.edge_button')[0]
 last_page = int(last_page.get_attribute('href').split('page=')[1])
@@ -116,4 +120,4 @@ logging.info('The last Page is: %s', str(last_page))
 logging.info('Retrieving product information')
 prod_list = get_all_product_info(driver, url, last_page)
 cars_df = pd.DataFrame(prod_list)
-cars_df.to_csv('ads_toyota.csv', index=False)
+cars_df.to_csv('ads_ford.csv', index=False)
