@@ -16,6 +16,7 @@ logging.basicConfig(
 
 
 def start_driver(url):
+    '''Starts the chrome driver'''
     logging.info("Requesting URL: %s", url)
     driver = webdriver.Chrome()
     driver.get(url)
@@ -24,7 +25,7 @@ def start_driver(url):
 
 
 def get_product_features(product):
-    
+    '''Returns a dictionary of the features of 1 listing'''
     prod_class_names = {
         'num_of_pic':'sc-kUdmhA.IibdL.mui-style-v1rqhp',
         'price':'sc-jdkBTo.sc-kpKSZj.kTOKgo.hlPXGZ',
@@ -87,6 +88,7 @@ def get_product_features(product):
 
 
 def get_all_product_info(driver, main_url, last_page):
+    '''Iterates through all listings on a page and returns a dictionary of all features for each listing'''
     prod_list = []
     # added for testing purposes
     # last_page = 1
@@ -110,14 +112,20 @@ def get_all_product_info(driver, main_url, last_page):
     driver.quit()
     return prod_list
 
-base_url = os.getenv('BASE_URL')
-car_brand = 'ford/'
-url = base_url + car_brand
-driver = start_driver(url)
-last_page = driver.find_elements(by=By.CLASS_NAME, value='sc-lizKOf.bzkMkX.edge_button')[0]
-last_page = int(last_page.get_attribute('href').split('page=')[1])
-logging.info('The last Page is: %s', str(last_page))
-logging.info('Retrieving product information')
-prod_list = get_all_product_info(driver, url, last_page)
-cars_df = pd.DataFrame(prod_list)
-cars_df.to_csv('ads_ford.csv', index=False)
+def main():
+    '''Main logic of the script'''
+    base_url = os.getenv('BASE_URL')
+    car_brand = 'lexus/'
+    url = base_url + car_brand
+    driver = start_driver(url)
+    last_page = driver.find_elements(by=By.CLASS_NAME, value='sc-lizKOf.bzkMkX.edge_button')[0]
+    last_page = int(last_page.get_attribute('href').split('page=')[1])
+    logging.info('The last Page is: %s', str(last_page))
+    logging.info('Retrieving product information')
+    prod_list = get_all_product_info(driver, url, last_page)
+    cars_df = pd.DataFrame(prod_list)
+    cars_df.to_csv('ads_lexus.csv', index=False)
+
+
+if __name__ == "__main__":
+    main()
