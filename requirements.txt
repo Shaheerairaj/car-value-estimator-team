@@ -1,6 +1,7 @@
 # Core libraries
 pandas
 python-dotenv
+ydata-profiling
 
 # web scrapping
 selenium
