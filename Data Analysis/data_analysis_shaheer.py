@@ -42,6 +42,7 @@ def data_report(data):
 
 def main():
     df = pd.read_csv('../data/ads_all.csv').drop(['ad_id','link'], axis=1)
+    data_report(df)
     df = clean_data(df)
     data_report(df)
 
