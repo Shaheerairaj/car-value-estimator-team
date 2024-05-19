@@ -1,42 +1,49 @@
 import pandas as pd
 from ydata_profiling import ProfileReport
 
-df = pd.read_csv('../data/ads_all.csv').drop(['ad_id','link'], axis=1)
+def clean_data(df):
+    df.drop(['id','tags'], axis=1, inplace=True)
+    df.dropna(axis=0, how='all',inplace=True)
+    df['price'] = df['price'].str.replace(',','').astype(float)
+    df['km'] = df['km'].str.replace(' km','').str.replace(',','').astype(float)
 
-# Generate the profile report
-profile = ProfileReport(df, title='Data Profiling Report')
-profile.to_file("reports/ads_all_before_cleaning.html")
+    # Dictionary for location mapping
+    location_mapping = {
+        'Dubai': 'Dubai',
+        'Abu Dhabi': 'Abu Dhabi',
+        'Sharjah': 'Sharjah',
+        'Fujeirah': 'Fujeirah',
+        'Al Ain': 'Al Ain',
+        'Ras Al Khaimah': 'Ras Al Khaimah',
+        'Ajman':'Ajman',
+        'Umm Al Qawain':'Umm Al Qawain'
+    }
 
-# Cleaning the data
-df.drop(['id','tags'], axis=1, inplace=True)
-df.dropna(axis=0, how='all',inplace=True)
-df['price'] = df['price'].str.replace(',','').astype(float)
-df['km'] = df['km'].str.replace(' km','').str.replace(',','').astype(float)
-
-# Dictionary for location mapping
-location_mapping = {
-    'Dubai': 'Dubai',
-    'Abu Dhabi': 'Abu Dhabi',
-    'Sharjah': 'Sharjah',
-    'Fujeirah': 'Fujeirah',
-    'Al Ain': 'Al Ain',
-    'Ras Al Khaimah': 'Ras Al Khaimah',
-    'Ajman':'Ajman',
-    'Umm Al Qawain':'Umm Al Qawain'
-}
-
-# Function to rename locations
-def rename_location(location):
-    if pd.isna(location):
+    # Function to rename locations
+    def rename_location(location):
+        if pd.isna(location):
+            return 'other'
+        for key in location_mapping:
+            if key in location:
+                return location_mapping[key]
         return 'other'
-    for key in location_mapping:
-        if key in location:
-            return location_mapping[key]
-    return 'other'
 
-# Apply the function to the 'location' column
-df['location_cleaned'] = df['location'].apply(rename_location)
+    # Apply the function to the 'location' column
+    df['location_cleaned'] = df['location'].apply(rename_location)
 
-# Generate the profile report
-profile = ProfileReport(df, title='Data Profiling Report')
-profile.to_file("reports/ads_all_after_cleaning.html")
+    return df
+
+def data_report(data):
+    report_name = input('Please enter name of html report: ')
+
+    # Generate the profile report
+    profile = ProfileReport(data, title='Data Profiling Report')
+    profile.to_file(f"reports/{report_name}.html")
+
+def main():
+    df = pd.read_csv('../data/ads_all.csv').drop(['ad_id','link'], axis=1)
+    df = clean_data(df)
+    data_report(df)
+
+if __name__== '__main__':
+    main()
