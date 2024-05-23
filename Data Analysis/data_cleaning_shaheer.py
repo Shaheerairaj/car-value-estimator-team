@@ -2,7 +2,7 @@ import pandas as pd
 from ydata_profiling import ProfileReport
 
 def clean_data(df):
-    df.drop(['id','tags'], axis=1, inplace=True)
+    df.drop(['tags'], axis=1, inplace=True)
     df.dropna(axis=0, how='all',inplace=True)
     df['price'] = df['price'].str.replace(',','').astype(float)
     df['km'] = df['km'].str.replace(' km','').str.replace(',','').astype(float)
@@ -45,6 +45,7 @@ def main():
     data_report(df)
     df = clean_data(df)
     data_report(df)
+    df.to_csv('../data/ads_all_cleaned.csv', index=False)
 
 if __name__== '__main__':
     main()
