@@ -41,7 +41,7 @@ def data_report(data):
     profile.to_file(f"reports/{report_name}.html")
 
 def main():
-    df = pd.read_csv('../data/ads_all.csv').drop(['ad_id','link'], axis=1)
+    df = pd.read_csv('../data_private/ads_all.csv').drop(['ad_id','link'], axis=1)
     data_report(df)
     df = clean_data(df)
     data_report(df)
