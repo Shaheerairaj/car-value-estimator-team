@@ -5,7 +5,9 @@
 **Feature Engineering:** Create new features based on existing ones (e.g., "age" by subtracting year from 2024, interaction terms like "year_km") (interaction terms aren't necessary for tree based models or for GBM models).
 Consider text analysis of the "title" (simialar to Anna's example).
 
-## 2. **Model Selection and Training**
+## 2. **Model Training**
+
+**Split Data:** Feel free to experiment with your training and test splits but I recommend having 3 sets. Training, validation and test.
 
 ### **Models to Try:**
 **Linear Regression:** Baseline model for comparison, easy to interpret.
@@ -14,8 +16,6 @@ Consider text analysis of the "title" (simialar to Anna's example).
 **LightGBM:** A lighter version of XGBoost. Saves on computational power required.
 
 ## 3. **Model Evaluation and Selection**
-
-**Split Data:** Feel free to experiment with your training and test splits but I recommend having 3 sets. Training, validation and test.
 
 ### **Evaluation Metrics:**
 **Root Mean Squared Error (RMSE):** Measures the average difference between predicted and actual prices. Lower RMSE indicates better performance.
