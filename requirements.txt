@@ -1,7 +1,13 @@
 # Core libraries
 pandas
+numpy
 python-dotenv
 ydata-profiling
 
 # web scrapping
 selenium
+
+# modeling
+scikit-learn
+xgboost
+lightgbm
