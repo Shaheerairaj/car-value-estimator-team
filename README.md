@@ -1,17 +1,20 @@
 # Project Overview
 
-Build a web application where users can input the relevant features and condition of a car they are interested in buying or selling to get an estimate of its value based on the Dubai second hand car market.
+**Objective:** To build a simple web app which will give a user an estimate of the value of a car depending on a number of set features which represent the condition of the car.
 
-# Project Vision
-**What is the purpose of the project?**
-- Build an end-to-end machine learning project
-- Learn about the different stages of a Data Science/Machine Learning project
-- Learn to collaborate with others on a DS/ML team
-- Simplicity and speed over complexity
-- Emphasis learning of juniors over perfection
+**Purpose:** Buying a car is a large investment of money and individuals usually have a difficult time determining if the value of a car is fair. They need a way to be able to measure the value or worth of a car they are interested in buying compared to similar cars according to it's condition. This will help the buyer in budgeting and negotiation.
 
-**Main focuses of the project:**
-- Collaboration
-- Model building
-- Model deployment
-- Working web app
+It can also serve to help sellers to appropriately price their vehicles according to market conditions.
+
+# Scope:
+1. Scrape the data from Dubai’s platform for trading second-hand products.
+2. Build a ML model to predict the price of a car. (Regression model)
+3. Deploy the model using a cloud service. (AWS/GCP)
+4. Build a web app to be usable by external users.
+
+# Project Phases:
+1. Data Collection (Web scrapping)
+2. Data Analysis
+3. Data Modelling
+4. Web App Design
+5. Cloud Deployment
