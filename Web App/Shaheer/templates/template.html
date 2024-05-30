@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Value Estimator</title>
+    <style>
+        body {
+            background-color: #282a36;
+            color: #f8f8f2;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #50fa7b;
+        }
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+            background-color: #44475a;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: none;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .button {
+            background-color: #50fa7b;
+            border: none;
+            color: #282a36;
+            padding: 15px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .prediction {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #6272a4;
+            border-radius: 4px;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Car Value Estimator</h1>
+        <form id="carForm">
+            <label for="brand">Car Brand:</label>
+            <select id="brand" name="brand" required>
+                <option value="Toyota">Toyota</option>
+                <option value="Honda">Honda</option>
+                <option value="Nissan">Nissan</option>
+                <option value="KIA">KIA</option>
+                <option value="Hyundai">Hyundai</option>
+                <option value="Ford">Ford</option>
+                <option value="Mercedes Benz">Mercedes Benz</option>
+                <option value="BMW">BMW</option>
+                <option value="Audi">Audi</option>
+                <option value="Lexus">Lexus</option>
+                <option value="Chevrolet">Chevrolet</option>
+                <option value="Volkswagen">Volkswagen</option>
+            </select>
+            
+            <label for="model">Car Model:</label>
+            <select id="model" name="model" required>
+                <option value="" disabled selected>Select a model</option>
+                <!-- Placeholder for car models -->
+            </select>
+            
+            <label for="mileage">Mileage:</label>
+            <input type="number" id="mileage" name="mileage" min="0" required>
+            
+            <label for="year">Model Year:</label>
+            <select id="year" name="year" required>
+                <script>
+                    const yearSelect = document.getElementById('year');
+                    for (let year = 2024; year >= 2000; year--) {
+                        let option = document.createElement('option');
+                        option.value = year;
+                        option.text = year;
+                        yearSelect.appendChild(option);
+                    }
+                </script>
+            </select>
+            
+            <label for="specs">Region Specs:</label>
+            <select id="specs" name="specs" required>
+                <option value="GCC Specs">GCC Specs</option>
+                <option value="American Specs">American Specs</option>
+                <option value="Japanese Specs">Japanese Specs</option>
+                <option value="European Specs">European Specs</option>
+                <option value="Chinese Specs">Chinese Specs</option>
+                <option value="Korean Specs">Korean Specs</option>
+                <option value="Canadian Specs">Canadian Specs</option>
+            </select>
+            
+            <label for="location">Location:</label>
+            <select id="location" name="location" required>
+                <option value="Dubai">Dubai</option>
+                <option value="Abu Dhabi">Abu Dhabi</option>
+                <option value="Al Ain">Al Ain</option>
+                <option value="Umm Al Qawain">Umm Al Qawain</option>
+                <option value="Fujeirah">Fujeirah</option>
+                <option value="Sharjah">Sharjah</option>
+                <option value="Ajman">Ajman</option>
+                <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+            </select>
+            
+            <label for="warranty">Warranty:</label>
+            <select id="warranty" name="warranty" required>
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+            
+            <label for="history">Service History:</label>
+            <select id="history" name="history" required>
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+            
+            <label for="accidents">No Accidents:</label>
+            <select id="accidents" name="accidents" required>
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+            
+            <button type="button" class="button" onclick="predictValue()">Predict</button>
+        </form>
+        <div id="prediction" class="prediction">Prediction will be displayed here.</div>
+    </div>
+
+    <script>
+        function predictValue() {
+            // Placeholder function to be replaced with actual prediction logic
+            const predictionElement = document.getElementById('prediction');
+            predictionElement.innerHTML = 'Predicted Value: $XXXXX';
+        }
+    </script>
+</body>
+</html>
