@@ -157,9 +157,16 @@
 
     <script>
         function predictValue() {
-            // Placeholder function to be replaced with actual prediction logic
-            const predictionElement = document.getElementById('prediction');
-            predictionElement.innerHTML = 'Predicted Value: $XXXXX';
+            const formData = new FormData(document.getElementById('carForm'));
+            fetch('/predict', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction').innerText = `Predicted Value: $${data.prediction}`;
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
 </body>
