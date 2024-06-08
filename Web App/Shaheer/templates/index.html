@@ -5,10 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Value Estimator</title>
     <style>
+        @font-face {
+            font-family: 'Gotham';
+            src: url('https://path-to-your-fonts/gotham.woff2') format('woff2');
+        }
         body {
             background-color: #282a36;
             color: #f8f8f2;
-            font-family: Arial, sans-serif;
+            font-family: 'Gotham', Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,19 +25,23 @@
         }
         .container {
             text-align: center;
-			height: 100%; 
+            height: auto;
             width: 100%;
             max-width: 500px;
             background-color: #44475a;
-            padding: 20px; 
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 1px solid #6272a4;
         }
         select, input[type="number"] {
-            width: 100%;
+            width: calc(100% - 22px); /* Adjust width to account for padding */
             padding: 10px;
             margin: 10px 0;
             border-radius: 4px;
+            background-color: #6272a4;
+            color: #f8f8f2;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             border: none;
         }
         input[type="number"] {
@@ -56,6 +64,10 @@
             margin-top: 20px;
             cursor: pointer;
             border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .button:hover {
+            background-color: #45e06b;
         }
         .prediction {
             margin-top: 20px;
@@ -65,6 +77,7 @@
             display: inline-block;
             width: 100%;
             text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -160,8 +173,8 @@
             'Toyota': ['Sequoia', 'Supra', 'Rav 4', 'Yaris', 'Fortuner', 'Prado', 'Alphard', 'Land Cruiser', 'Highlander', 'Camry', 'Corolla', 'FJ Cruiser', 'Hilux', 'Previa', 'Land Cruiser 70', 'Corolla Cross', 'Prius', 'Land Cruiser 79 series', 'Crown', 'Avanza', 'Avalon', 'Innova', 'Tundra', 'Hiace', 'C-HR', 'Zelas', 'Rush', 'Raize', 'Land Cruiser 76 series', '86', '4Runner', 'Granvia', 'Tacoma', 'Veloz', 'Sienna', 'Coaster', 'Venza', 'Cressida', 'Urban Cruiser', 'Aurion', 'Scion', 'Celica', 'Echo'],
             'Honda': ['HR-V', 'Accord', 'ENS1', 'CR-V', 'Odyssey', 'Civic', 'Pilot', 'City', 'S2000', 'Jazz', 'Crosstour', 'ZR-V', 'Odyssey J', 'MR-V'],
             'Nissan': ['Sunny', 'Patrol', 'Maxima', 'Micra', 'Altima', 'Urvan', 'Navara', 'Pathfinder', 'Kicks', 'X-Trail', 'Tiida', 'Sentra', 'Juke', 'Rogue', 'Armada', 'Xterra', 'Murano', 'Z', 'Versa', 'GT-R', 'Qashqai', 'Quest', '370z', 'Patrol Pickup', '400Z', 'Van', '300ZX', 'Leaf', 'Titan', '350Z'],
-            'KIA': ['Carens', 'Stinger', 'K5', 'Seltos', 'Carnival', 'Sportage', 'Mohave', 'Telluride', 'Sorento', 'Cerato', 'Rio', 'Sedona', 'Optima', 'K8', 'Forte', 'Cadenza', 'Bongo', 'Pegas', 'Soul', 'Picanto', 'Niro', 'EV6', 'Sonet', 'K900', 'K3', 'Oprius', 'Quoris'],
-            'Hyundai': ['Palisade', 'Santa Fe', 'Elantra', 'Accent', 'Staria', 'Grand i10', 'Tucson', 'Creta', 'Genesis', 'Sonata', 'Veloster', 'Kona', 'Azera', 'i10', 'Grand Santa Fe', 'H1', 'Avanti', 'i20', 'Venue', 'Porter', 'i30', 'Getz', 'Grandeur', 'H 100', 'Verna', 'Centennial', 'Coupe', 'Matrix'],
+            'KIA': ['Carens', 'Stinger', 'K5', 'Seltos', 'Carnival', 'Sportage', 'Mohave', 'Telluride', 'Sorento', 'Cerato', 'Rio', 'Sedona', 'Optima', 'K8', 'Forte', 'Cadenza', 'Bongo', 'Pegas', 'Soul', 'Picanto', 'Sonet', 'Shuma', 'K900', 'Ev6'],
+            'Hyundai': ['Kona', 'Tucson', 'Ioniq', 'Sonata', 'Azera', 'Santa Fe', 'Creta', 'Elantra', 'Accent', 'Palisade', 'Genesis', 'H-1', 'Veloster', 'Staria', 'Nexo', 'Galloper', 'Excel', 'Venue', 'Terracan', 'Scoupe', 'Porter', 'Lantra', 'Atos', 'Entourage', 'Matrix', 'Centennial', 'Coupe', 'Xcent', 'Aura', 'Veracruz', 'i40', 'ix35', 'i10', 'Grand Santa Fe', 'H1', 'Avanti', 'i20', 'Venue', 'Porter', 'i30', 'Getz', 'Grandeur', 'H 100', 'Verna', 'Centennial', 'Coupe', 'Matrix'],
             'Ford': ['F-Series Pickup', 'Mustang', 'Edge', 'Focus', 'Territory', 'Explorer', 'Expedition', 'Escape', 'Ecosport', 'Figo', 'Transit', 'Ranger', 'GT', 'Fusion', 'Taurus', 'Escort', 'Fiesta', 'Bronco', 'Pickup', 'Flex', 'Super Duty', 'Mustang Mach-E', 'Shelby Cobra', 'Everest', 'Other', 'Mondeo', 'Crown Victoria', 'Tourneo', 'Thunderbird'],
             'Mercedes Benz': ['CLS-Class', 'G-Class', 'E-Class Coupe', 'A-Class', 'GLC', 'E-Class', 'C-Class', 'S-Class', 'GLK-Class', 'CLA', 'CLE-Class', 'GL-Class', 'GLS-Class', 'M-Class', 'AMG', 'V-Class', 'GLE Coupe', 'GLE-Class', 'A200', 'GLC 63', 'EQC', 'SL-Class', 'Vito', 'Viano', 'GLA', 'EQE', 'GLB', 'SLS', '240/260/280', 'CLS 450', 'EQS', 'C43', 'C-Class Coupe', 'S-Class Coupe', 'SLK-Class', 'Sprinter', 'CLK-Class', 'CL-Class', 'SLC', 'SLR', 'EQB', 'EQA', 'B-Class', 'X Class', 'R-Class', '190', 'SEL-Class', '450 SEL', 'CLC', '400/420', 'SEC-Class'],
             'BMW': ['6-Series', '7-Series', '4-Series', '3-Series', 'X5', '1-Series', 'X6', 'X3', '5-Series', 'Z4', 'i3', 'X7', 'M5', '8-Series', 'X4', 'M8', 'M850i', 'M4', 'X1', 'iX', 'M3', '2-Series', 'i8', 'M2', 'X2', 'XM', 'i7', 'M6', 'Z3', 'Z8', 'M1'],
