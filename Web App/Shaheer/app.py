@@ -6,8 +6,8 @@ from datetime import datetime
 app = Flask(__name__)
 
 # load models
-luxury_model = joblib.load('../../Model Building/models/luxury_model.pkl')
-non_luxury_model = joblib.load('../../Model Building/models/non_luxury_model.pkl')
+luxury_model = joblib.load('models/luxury_model.pkl')
+non_luxury_model = joblib.load('models/non_luxury_model.pkl')
 
 luxury_brands = ['Lexus','Mercedes Benz','BMW','Audi']
 
