@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Value Estimator</title>
+    <style>
+        body {
+            background-color: #282a36;
+            color: #f8f8f2;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #50fa7b;
+        }
+        .container {
+            text-align: center;
+			height: 100%; 
+            width: 100%;
+            max-width: 500px;
+            background-color: #44475a;
+            padding: 20px; 
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: none;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .button {
+            background-color: #50fa7b;
+            border: none;
+            color: #282a36;
+            padding: 15px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .prediction {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #6272a4;
+            border-radius: 4px;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Car Value Estimator</h1>
+        <form id="carForm">
+            <label for="brand">Car Brand:</label>
+            <select id="brand" name="brand" required>
+				<option value="" disabled selected> --Select a brand-- </option>
+                <option value="Toyota">Toyota</option>
+                <option value="Honda">Honda</option>
+                <option value="Nissan">Nissan</option>
+                <option value="KIA">KIA</option>
+                <option value="Hyundai">Hyundai</option>
+                <option value="Ford">Ford</option>
+                <option value="Mercedes Benz">Mercedes Benz</option>
+                <option value="BMW">BMW</option>
+                <option value="Audi">Audi</option>
+                <option value="Lexus">Lexus</option>
+                <option value="Chevrolet">Chevrolet</option>
+                <option value="Volkswagen">Volkswagen</option>
+            </select>
+            
+            <label for="model">Car Model:</label>
+            <select id="model" name="model" required>
+                <option value="" disabled selected> --Select a model-- </option>
+            </select>
+            
+            <label for="mileage">Mileage:</label>
+            <input type="number" id="mileage" name="mileage" min="0" required>
+            
+            <label for="year">Model Year:</label>
+            <select id="year" name="year" required>
+				<option value="" disabled selected> --Select year-- </option>
+                <script>
+                    const yearSelect = document.getElementById('year');
+                    for (let year = 2024; year >= 2000; year--) {
+                        let option = document.createElement('option');
+                        option.value = year;
+                        option.text = year;
+                        yearSelect.appendChild(option);
+                    }
+                </script>
+            </select>
+            
+            <label for="specs">Region Specs:</label>
+            <select id="specs" name="specs" required>
+				<option value="" disabled selected> --Select a spec-- </option>
+                <option value="GCC Specs">GCC Specs</option>
+                <option value="American Specs">American Specs</option>
+                <option value="Japanese Specs">Japanese Specs</option>
+                <option value="European Specs">European Specs</option>
+                <option value="Chinese Specs">Chinese Specs</option>
+                <option value="Korean Specs">Korean Specs</option>
+                <option value="Canadian Specs">Canadian Specs</option>
+            </select>
+            
+            <label for="location">Location:</label>
+            <select id="location" name="location" required>
+				<option value="" disabled selected> --Select a location-- </option>
+                <option value="Dubai">Dubai</option>
+                <option value="Abu Dhabi">Abu Dhabi</option>
+                <option value="Al Ain">Al Ain</option>
+                <option value="Umm Al Qawain">Umm Al Qawain</option>
+                <option value="Fujeirah">Fujeirah</option>
+                <option value="Sharjah">Sharjah</option>
+                <option value="Ajman">Ajman</option>
+                <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+            </select>
+            
+            <label for="warranty">Warranty:</label>
+            <select id="warranty" name="warranty" required>
+				<option value="" disabled selected> --Select an option-- </option>
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+            
+            <label for="history">Service History:</label>
+            <select id="history" name="history" required>
+				<option value="" disabled selected> --Select an option-- </option>
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+            
+            <label for="accidents">No Accidents:</label>
+            <select id="accidents" name="accidents" required>
+				<option value="" disabled selected> --Select an option-- </option>
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+            
+            <button type="button" class="button" onclick="predictValue()">Predict</button>
+        </form>
+        <div id="prediction" class="prediction">Prediction will be displayed here.</div>
+    </div>
+
+    <script>
+        const carModelsByBrand = {
+            'Toyota': ['Sequoia', 'Supra', 'Rav 4', 'Yaris', 'Fortuner', 'Prado', 'Alphard', 'Land Cruiser', 'Highlander', 'Camry', 'Corolla', 'FJ Cruiser', 'Hilux', 'Previa', 'Land Cruiser 70', 'Corolla Cross', 'Prius', 'Land Cruiser 79 series', 'Crown', 'Avanza', 'Avalon', 'Innova', 'Tundra', 'Hiace', 'C-HR', 'Zelas', 'Rush', 'Raize', 'Land Cruiser 76 series', '86', '4Runner', 'Granvia', 'Tacoma', 'Veloz', 'Sienna', 'Coaster', 'Venza', 'Cressida', 'Urban Cruiser', 'Aurion', 'Scion', 'Celica', 'Echo'],
+            'Honda': ['HR-V', 'Accord', 'ENS1', 'CR-V', 'Odyssey', 'Civic', 'Pilot', 'City', 'S2000', 'Jazz', 'Crosstour', 'ZR-V', 'Odyssey J', 'MR-V'],
+            'Nissan': ['Sunny', 'Patrol', 'Maxima', 'Micra', 'Altima', 'Urvan', 'Navara', 'Pathfinder', 'Kicks', 'X-Trail', 'Tiida', 'Sentra', 'Juke', 'Rogue', 'Armada', 'Xterra', 'Murano', 'Z', 'Versa', 'GT-R', 'Qashqai', 'Quest', '370z', 'Patrol Pickup', '400Z', 'Van', '300ZX', 'Leaf', 'Titan', '350Z'],
+            'KIA': ['Carens', 'Stinger', 'K5', 'Seltos', 'Carnival', 'Sportage', 'Mohave', 'Telluride', 'Sorento', 'Cerato', 'Rio', 'Sedona', 'Optima', 'K8', 'Forte', 'Cadenza', 'Bongo', 'Pegas', 'Soul', 'Picanto', 'Niro', 'EV6', 'Sonet', 'K900', 'K3', 'Oprius', 'Quoris'],
+            'Hyundai': ['Palisade', 'Santa Fe', 'Elantra', 'Accent', 'Staria', 'Grand i10', 'Tucson', 'Creta', 'Genesis', 'Sonata', 'Veloster', 'Kona', 'Azera', 'i10', 'Grand Santa Fe', 'H1', 'Avanti', 'i20', 'Venue', 'Porter', 'i30', 'Getz', 'Grandeur', 'H 100', 'Verna', 'Centennial', 'Coupe', 'Matrix'],
+            'Ford': ['F-Series Pickup', 'Mustang', 'Edge', 'Focus', 'Territory', 'Explorer', 'Expedition', 'Escape', 'Ecosport', 'Figo', 'Transit', 'Ranger', 'GT', 'Fusion', 'Taurus', 'Escort', 'Fiesta', 'Bronco', 'Pickup', 'Flex', 'Super Duty', 'Mustang Mach-E', 'Shelby Cobra', 'Everest', 'Other', 'Mondeo', 'Crown Victoria', 'Tourneo', 'Thunderbird'],
+            'Mercedes Benz': ['CLS-Class', 'G-Class', 'E-Class Coupe', 'A-Class', 'GLC', 'E-Class', 'C-Class', 'S-Class', 'GLK-Class', 'CLA', 'CLE-Class', 'GL-Class', 'GLS-Class', 'M-Class', 'AMG', 'V-Class', 'GLE Coupe', 'GLE-Class', 'A200', 'GLC 63', 'EQC', 'SL-Class', 'Vito', 'Viano', 'GLA', 'EQE', 'GLB', 'SLS', '240/260/280', 'CLS 450', 'EQS', 'C43', 'C-Class Coupe', 'S-Class Coupe', 'SLK-Class', 'Sprinter', 'CLK-Class', 'CL-Class', 'SLC', 'SLR', 'EQB', 'EQA', 'B-Class', 'X Class', 'R-Class', '190', 'SEL-Class', '450 SEL', 'CLC', '400/420', 'SEC-Class'],
+            'BMW': ['6-Series', '7-Series', '4-Series', '3-Series', 'X5', '1-Series', 'X6', 'X3', '5-Series', 'Z4', 'i3', 'X7', 'M5', '8-Series', 'X4', 'M8', 'M850i', 'M4', 'X1', 'iX', 'M3', '2-Series', 'i8', 'M2', 'X2', 'XM', 'i7', 'M6', 'Z3', 'Z8', 'M1'],
+            'Audi': ['Q7', 'A8', 'R8', 'Q8', 'S8', 'Q5', 'A3', 'e-tron', 'Q2', 'RSQ3', 'S5/RS5', 'S6/RS6', 'A4', 'S7/RS7', 'A5', 'Q3', 'S3/RS3', 'A6', 'RS Q8', 'SQ8', 'A7', 'A1', 'TT', 'RS e-tron', 'S4/RS4'],
+            'Lexus': ['RX-Series', 'LX-Series', 'NX 200t', 'GX 460', 'LC 500', 'UX 200', 'IS-Series', 'LX570', 'LS-Series', 'TX', 'ES-Series', 'LX600', 'GS-Series', 'NX 300', 'RC', 'IS350', 'IS300', 'NX 350', 'NX 350H', 'RC F', 'IS-F', 'NX-Series', 'UX-Series', 'GX-Series', 'IS-C', 'SC-Series', 'LFA', 'CT-Series', 'LM 350h', 'LM 300'],
+            'Chevrolet': ['Camaro', 'Tahoe', 'Malibu', 'Captiva', 'Spark', 'Suburban', 'Silverado', 'Blazer', 'Groove', 'Avalanche', 'Cruze', 'Aveo', 'Corvette', 'Traverse', 'Trailblazer', 'Epica', 'Sonic', 'Impala', 'SSR', 'Equinox', 'Trax', 'Express', 'Chevelle', 'Colorado', 'Caprice', 'Lumina', 'Nova', 'Apache', 'Menlo'],
+            'Volkswagen': ['Touareg', 'Teramont', 'Golf', 'Tiguan', 'Golf R', 'GTI', 'Passat', 'Beetle', 'CC', 'Transporter', 'Jetta', 'Arteon', 'ID.4', 'ID.6', 'Crafter', 'Scirocco', 'T-Roc', 'Eos', 'Multivan', 'ID.3', 'Polo', 'Bora', 'Caddy', 'Eurovan', 'ID.7']
+        };
+
+        const brandSelect = document.getElementById('brand');
+        const modelSelect = document.getElementById('model');
+
+        brandSelect.addEventListener('change', function() {
+            const selectedBrand = brandSelect.value;
+            const models = carModelsByBrand[selectedBrand];
+
+            // Clear existing options
+            modelSelect.innerHTML = '';
+
+            // Add a default disabled option
+            let defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.text = ' --Select a model-- ';
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            modelSelect.appendChild(defaultOption);
+
+            // Populate new options
+            models.forEach(model => {
+                let option = document.createElement('option');
+                option.value = model;
+                option.text = model;
+                modelSelect.appendChild(option);
+            });
+        });
+        
+        function predictValue() {
+            const formData = new FormData(document.getElementById('carForm'));
+            fetch('/predict', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction').innerText = `Predicted Value: AED ${data.prediction}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

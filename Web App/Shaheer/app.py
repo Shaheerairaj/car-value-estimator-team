@@ -6,8 +6,8 @@ from datetime import datetime
 app = Flask(__name__)
 
 # load models
-luxury_model = joblib.load('../../Model Building/models/luxury_model.pkl')
-non_luxury_model = joblib.load('../../Model Building/models/non_luxury_model.pkl')
+luxury_model = joblib.load('models/luxury_model.pkl')
+non_luxury_model = joblib.load('models/non_luxury_model.pkl')
 
 luxury_brands = ['Lexus','Mercedes Benz','BMW','Audi']
 
@@ -51,10 +51,14 @@ def predict():
 
     # Make a prediction
     prediction = model.predict(df)[0]
-    prediction = int(prediction)
+    prediction = round(prediction/500) * 500
+    pred_lower = prediction - 2000
+    pred_higher = prediction + 2000
+    pred_range = str(pred_lower) + ' - ' + str(pred_higher)
 
     # Return the result as JSON
-    return jsonify(prediction=prediction)
+    return jsonify(prediction=pred_range)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080)
