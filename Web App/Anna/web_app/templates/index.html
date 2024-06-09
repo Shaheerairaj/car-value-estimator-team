@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function updateModels() {
+            const brand = document.getElementById('brand').value;
+            const modelSelect = document.getElementById('model');
+            const models = {
+                'mercedes-benz': ['CLS-Class', 'G-Class', 'E-Class Coupe', 'A-Class', 'GLC',
+       'E-Class', 'C-Class', 'S-Class', 'GLK-Class', 'CLA', 'CLE-Class',
+       'GL-Class', 'GLS-Class', 'Other', 'M-Class', 'AMG', 'V-Class',
+       'GLE Coupe', 'GLE-Class', 'A200', 'GT', 'GLC 63', 'EQC',
+       'SL-Class', 'Vito', 'Viano', 'GLA', 'EQE', 'GLB', '240/260/280',
+       'CLS 450', 'EQS', 'C43', 'C-Class Coupe', 'SLS', 'S-Class Coupe',
+       'SLK-Class', 'Sprinter', 'CLK-Class', 'CL-Class', 'SLC', 'EQB',
+       'EQA', 'SLR', 'B-Class', 'X Class', 'R-Class', '190', 'SEL-Class',
+       '450 SEL', 'CLC', '400/420', 'SEC-Class'],
+                'lexus': ['RX-Series', 'LX-Series', 'NX 200t', 'GX 460', 'LC 500', 'UX 200',
+       'IS-Series', 'LX570', 'LS-Series', 'TX', 'ES-Series', 'LX600',
+       'GS-Series', 'NX 300', 'RC', 'IS350', 'IS300', 'NX 350', 'NX 350H',
+       'RC F', 'IS-F', 'NX-Series', 'UX-Series', 'GX-Series', 'Other',
+       'IS-C', 'SC-Series', 'CT-Series', 'LM 350h', 'LM 300'],
+                'bmw': ['6-Series', '7-Series', '4-Series', '3-Series', 'X5', '1-Series',
+       'X6', 'X3', '5-Series', 'Z4', 'i3', 'X7', 'M5', '8-Series', 'X4',
+       'M8', 'M850i', 'M4', 'X1', 'iX', 'M3', '2-Series', 'i8', 'M2',
+       'X2', 'XM', 'i7', 'M6', 'Z3', 'Other', 'Z8', 'M1'],
+                'audi': ['Q7', 'A8', 'R8', 'Q8', 'S8', 'Q5', 'A3', 'e-tron', 'Q2', 'RSQ3',
+       'S5/RS5', 'S6/RS6', 'A4', 'S7/RS7', 'A5', 'Q3', 'S3/RS3', 'A6',
+       'RS Q8', 'SQ8', 'A7', 'A1', 'TT', 'RS e-tron', 'S4/RS4', 'Other'],
+       'ford':['F-Series Pickup', 'Mustang', 'Edge', 'Focus', 'Territory',
+       'Explorer', 'Expedition', 'Escape', 'Ecosport', 'Figo', 'Transit',
+       'Ranger', 'Fusion', 'Taurus', 'Escort', 'Fiesta', 'Bronco',
+       'Pickup', 'Flex', 'Super Duty', 'Mustang Mach-E', 'Shelby Cobra',
+       'Everest', 'Other', 'Mondeo', 'Crown Victoria', 'GT', 'Tourneo',
+       'Thunderbird'],
+       'honda':['Accord', 'CR-V', 'City', 'Civic', 'Crosstour', 'ENS1', 'HR-V',
+       'Jazz', 'MR-V', 'Odyssey', 'Odyssey J', 'Other', 'Pilot', 'S2000',
+       'ZR-V'],
+       'hyundai':['Accent', 'Avanti', 'Azera', 'Centennial', 'Coupe', 'Creta',
+       'Elantra', 'Genesis', 'Getz', 'Grand Santa Fe', 'Grand i10',
+       'Grandeur', 'H 100', 'H1', 'Kona', 'Matrix', 'Other', 'Palisade',
+       'Porter', 'Santa Fe', 'Sonata', 'Staria', 'Tucson', 'Veloster',
+       'Venue', 'Verna', 'i10', 'i20', 'i30'],
+       'kia':['Bongo', 'Cadenza', 'Carens', 'Carnival', 'Cerato', 'EV6', 'Forte',
+       'K3', 'K5', 'K8', 'K900', 'Mohave', 'Niro', 'Oprius', 'Optima',
+       'Other', 'Pegas', 'Picanto', 'Quoris', 'Rio', 'Sedona', 'Seltos',
+       'Sonet', 'Sorento', 'Soul', 'Sportage', 'Stinger', 'Telluride'],
+       'nissan':['300ZX', '350Z', '370z', '400Z', 'Altima', 'Armada', 'GT-R',
+       'Juke', 'Kicks', 'Leaf', 'Maxima', 'Micra', 'Murano', 'Navara',
+       'Other', 'Pathfinder', 'Patrol', 'Patrol Pickup', 'Pickup',
+       'Qashqai', 'Quest', 'Rogue', 'Sentra', 'Sunny', 'Tiida', 'Titan',
+       'Urvan', 'Van', 'Versa', 'X-Trail', 'Xterra', 'Z'],
+       'toyota':['4Runner', '86', 'Alphard', 'Aurion', 'Avalon', 'Avanza', 'C-HR',
+       'Camry', 'Celica', 'Coaster', 'Corolla', 'Corolla Cross',
+       'Cressida', 'Crown', 'Echo', 'FJ Cruiser', 'Fortuner', 'Granvia',
+       'Hiace', 'Highlander', 'Hilux', 'Innova', 'Land Cruiser',
+       'Land Cruiser 70', 'Land Cruiser 76 series',
+       'Land Cruiser 79 series', 'Other', 'Pickup', 'Prado', 'Previa',
+       'Prius', 'Raize', 'Rav 4', 'Rush', 'Scion', 'Sequoia', 'Sienna',
+       'Supra', 'Tacoma', 'Tundra', 'Urban Cruiser', 'Veloz', 'Venza',
+       'Yaris', 'Zelas'],
+       'chevrolet':['Apache', 'Avalanche', 'Aveo', 'Blazer', 'Camaro', 'Caprice',
+       'Captiva', 'Chevelle', 'Colorado', 'Corvette', 'Cruze', 'Epica',
+       'Equinox', 'Express', 'Groove', 'Impala', 'Lumina', 'Malibu',
+       'Menlo', 'Nova', 'Pickup', 'SSR', 'Silverado', 'Sonic', 'Spark',
+       'Suburban', 'Tahoe', 'Trailblazer', 'Traverse', 'Trax'],
+       'volkswagen':['Arteon', 'Beetle', 'Bora', 'CC', 'Caddy', 'Crafter', 'Eos',
+       'Eurovan', 'GTI', 'Golf', 'Golf R', 'ID.3', 'ID.4', 'ID.6', 'ID.7',
+       'Jetta', 'Multivan', 'Other', 'Passat', 'Polo', 'Scirocco',
+       'T-Roc', 'Teramont', 'Tiguan', 'Touareg', 'Transporter']
+
+                // Add more brands and models as needed
+            };
+
+            modelSelect.innerHTML = '';
+
+            if (models[brand]) {
+                models[brand].forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    modelSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Car Price Prediction</h1>
+    <form action="/predict" method="post">
+        <label for="brand">Brand:</label>
+        <select id="brand" name="brand" onchange="updateModels()" required>
+            <option value="mercedes-benz">Mercedes-Benz</option>
+            <option value="lexus">Lexus</option>
+            <option value="bmw">BMW</option>
+            <option value="audi">Audi</option>
+            <option value="ford">Ford</option>
+            <option value="honda">Honda</option>
+            <option value="hyundai">Hyundai</option>
+            <option value="kia">Kia</option>
+            <option value="nissan">Nissan</option>
+            <option value="toyota">Toyota</option>
+            <option value="chevrolet">Chevrolet</option>
+            <option value="volkswagen">Volkswagen</option>
+            <!-- Add more brands as needed -->
+        </select><br>
+
+        <label for="model">Model:</label>
+        <select id="model" name="model" required>
+            <!-- Models will be populated based on the selected brand -->
+        </select><br>
+
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" required><br>
+
+        <label for="km">Kilometers Driven:</label>
+        <input type="number" id="km" name="km" required><br>
+
+        <label for="steering_side">Steering Side:</label>
+        <select id="steering_side" name="steering_side" required>
+            <option value="Left Hand">Left Hand</option>
+            <option value="Right Hand">Right Hand</option>
+        </select><br>
+
+        <label for="region_specs">Region Specs:</label>
+        <select id="region_specs" name="region_specs" required>
+            <option value="GCC Specs">GCC Specs</option>
+            <option value="American Specs">American Specs</option>
+        </select><br>
+
+        <button type="submit">Predict Price</button>
+    </form>
+    <div id="result">
+        {% if result %}
+        <h2>Predicted Price: ${{ result }}</h2>
+        {% endif %}
+    </div>
+</body>
+</html>
