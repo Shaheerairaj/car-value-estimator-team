@@ -51,11 +51,14 @@ def predict():
 
     # Make a prediction
     prediction = model.predict(df)[0]
-    prediction = int(prediction)
+    prediction = round(prediction/500) * 500
+    pred_lower = prediction - 2000
+    pred_higher = prediction + 2000
+    pred_range = str(pred_lower) + ' - ' + str(pred_higher)
 
     # Return the result as JSON
-    return jsonify(prediction=prediction)
+    return jsonify(prediction=pred_range)
 
 if __name__ == '__main__':
-    #app.run(debug=True)
-    app.run(host='0.0.0.0', port=8080)
+    app.run(debug=True)
+    #app.run(host='0.0.0.0', port=8080)
