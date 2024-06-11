@@ -52,9 +52,9 @@ def predict():
     # Make a prediction
     prediction = model.predict(df)[0]
     prediction = round(prediction/500) * 500
-    pred_lower = prediction - 2000
-    pred_higher = prediction + 2000
-    pred_range = str(pred_lower) + ' - ' + str(pred_higher)
+    pred_lower = f"{prediction - 10000:,}"
+    pred_higher = f"{prediction - 4000:,}"
+    pred_range = pred_lower + ' - ' + pred_higher
 
     # Return the result as JSON
     return jsonify(prediction=pred_range)
